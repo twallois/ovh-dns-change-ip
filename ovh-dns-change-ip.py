@@ -33,11 +33,12 @@ def setupOVHConf(ovhEndpoint,ovhApplicationKey,ovhApplicationSecret):
     config_ovh[ovhEndpoint]["application_secret"]=ovhApplicationSecret
     config_ovh[ovhEndpoint]["consumer_key"]=validation['consumerKey']
 
-    with open('ovh.conf', 'w') as configfile_ovh:
+    script_dir = os.path.dirname(__file__)
+    with open(os.path.join(script_dir,'ovh.conf'), 'w') as configfile_ovh:
         config_ovh.write(configfile_ovh)
 
-
-conf_file="ovh-dns-change-ip.conf"
+script_dir = os.path.dirname(__file__)
+conf_file=os.path.join(script_dir, "ovh-dns-change-ip.conf")
 
 #Get the configparser object
 config_object = ConfigParser()
@@ -59,7 +60,7 @@ if "--setup" in sys.argv or "-s" in sys.argv:
     os._exit(status=0)
 
 #Check file ovh.conf exist
-if not os.path.isfile("ovh.conf"):
+if not os.path.isfile(os.path.join(script_dir,"ovh.conf")):
     print("ERROR, you need to do a Setup before execute the script")
     print("Execute the script with a --setup or -s")
     os._exit(status=2)
@@ -72,7 +73,7 @@ IPCurrent=requests.get("https://ifconfig.me").text
 
 #OVH call
 try:
-    client = ovh.Client()
+    client = ovh.Client(config_file=os.path.join(script_dir,"ovh.conf"))
     ListRecord=client.get('/domain/zone/%s/record' % dnsInfoDomainName,
                         fieldType='A',
                         subDomain=dnsInfoSubDomainName)

@@ -92,6 +92,7 @@ try:
     record=ListRecord[0]
     detailRecord=client.get('/domain/zone/%s/record/%s' % (dnsInfoDomainName,record))
     targetIpRecord=detailRecord["target"]
+    print("IP :"+str(targetIpRecord))
     if targetIpRecord==IPCurrent:
         print("IP identical, record will not need to change")
     else:

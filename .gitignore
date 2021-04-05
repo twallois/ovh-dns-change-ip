@@ -1,3 +1,4 @@
 ovh.conf
 ovh-dns-change-ip.conf
 /.vscode/
+ovh-dns-change-ip.log

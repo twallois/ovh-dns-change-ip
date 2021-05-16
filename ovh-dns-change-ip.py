@@ -16,6 +16,7 @@ def setupOVHConf(ovhEndpoint,ovhApplicationKey,ovhApplicationSecret):
     ck = client.new_consumer_key_request()
     ck.add_rules(ovh.API_READ_ONLY, "/domain/zone/*/record")
     ck.add_rules(ovh.API_READ_WRITE_SAFE, "/domain/zone/*/record/*")
+    ck.add_rules(ovh.API_READ_WRITE_SAFE, "/domain/zone/*/refresh")
 
 
     # Request token
@@ -99,6 +100,8 @@ try:
         print("The local IP is not the DNS IP, we will change the Record")
         detailRecord=client.put('/domain/zone/%s/record/%s' % (dnsInfoDomainName,record),target=IPCurrent)
         print("IP Change OK")
+        client.post('/domain/zone/%s/refresh'  % (dnsInfoDomainName))
+        print("Refresh OK")
   
 except ovh.exceptions.NotGrantedCall:
     print("Permission denied, you need to setup again your grant was revoked")
